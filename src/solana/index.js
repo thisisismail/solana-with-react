@@ -9,7 +9,7 @@ import { deserialize, serialize } from "borsh";
 
 const cluster = "http://localhost:8899";
 const connection = new Connection(cluster, "confirmed");
-const programId = new PublicKey("A7w6ojU5b2Ji6HqbsycQay3jU1eHJTqoWHoC9ADTyxeD");
+const programId = new PublicKey("4r13qwT9Rm5JtufaGaiM5dMNLxxe9EoFNZUJ9rWFT4S9");
 
 console.log(window?.phantom?.solana);
 
@@ -93,6 +93,7 @@ export async function createCampaign(name, description, image_link, wallet) {
   const lamports = await connection.getMinimumBalanceForRentExemption(
     data.length
   );
+  console.log(lamports);
   console.log(data.length);
   const createProgramAccount = SystemProgram.createAccountWithSeed({
     fromPubkey: wallet.publicKey,
@@ -149,6 +150,8 @@ export async function getAllCampaigns() {
 
 export async function donateToCampaign(campaignPubKey, amount, wallet) {
   await checkWallet(wallet);
+  console.log("Campaign PublicKey");
+  console.log(campaignPubKey.toBase58());
 
   const SEED = "abcdef" + Math.random().toString();
   let newAccount = await PublicKey.createWithSeed(
@@ -221,7 +224,7 @@ export async function withdraw(campaignPubKey, amount, wallet) {
     [instructionTOOurProgram],
     wallet
   );
-  const signature = await signAndSendTransaction(trans);
+  const signature = await signAndSendTransaction(trans, wallet);
   const result = await connection.confirmTransaction(signature);
   console.log("end sendMessage", result);
 }
