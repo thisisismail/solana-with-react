@@ -13,6 +13,8 @@
 
 /test-ledger
 
+/program/test-ledger
+
 # misc
 .DS_Store
 .env.local
